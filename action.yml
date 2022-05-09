@@ -41,16 +41,18 @@ runs:
 
         openwrt_filename="${{ inputs.openwrt_path }}"
         openwrt_savepath="openwrt-armvirt"
+        openwrt_outpath="out"
         echo -e "Get openwrt file input parameters: [ ${openwrt_filename} ]"
         [ -z "${openwrt_filename}" ] && echo -e "The [ openwrt_path ] variable must be specified." && exit 1
-        [ -d "${openwrt_savepath}" ] || sudo mkdir -p ${openwrt_savepath}
+        [ -d "${openwrt_savepath}" ] || mkdir -p ${openwrt_savepath}
+        [ -d "${openwrt_outpath}" ] || mkdir -p ${openwrt_outpath}
 
         if [[ "${openwrt_filename}" == http* ]]; then
           echo -e "Use wget to download file: [ ${openwrt_filename} ]"
-          sudo wget ${openwrt_filename} -q -P ${openwrt_savepath} 2>/dev/null
+          wget ${openwrt_filename} -q -P ${openwrt_savepath} 2>/dev/null
         else
           echo -e "Copy files: [ ${openwrt_filename} ]"
-          sudo cp -f ${GITHUB_WORKSPACE}/${openwrt_filename} ${openwrt_savepath} 2>/dev/null
+          cp -f ${GITHUB_WORKSPACE}/${openwrt_filename} ${openwrt_savepath} 2>/dev/null
         fi
         sync
         echo -e "About the ${openwrt_savepath} directory: \n $(ls ${openwrt_savepath} -l 2>/dev/null)"
@@ -66,15 +68,17 @@ runs:
         sudo chmod +x make
         sudo ./make ${make_command}
 
+        cd ${GITHUB_ACTION_PATH}/${openwrt_outpath}
+        sudo chmod -R 777 *
         echo -e "Output environment variables."
-        echo "PACKAGED_OUTPUTPATH=${PWD}/out" >> $GITHUB_ENV
+        echo "PACKAGED_OUTPUTPATH=${PWD}" >> $GITHUB_ENV
         echo "PACKAGED_OUTPUTDATE=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
         echo "PACKAGED_STATUS=success" >> $GITHUB_ENV
-        echo -e "PACKAGED_OUTPUTPATH: ${PWD}/out"
+        echo -e "PACKAGED_OUTPUTPATH: ${PWD}"
         echo -e "PACKAGED_OUTPUTDATE: $(date +"%Y.%m.%d.%H%M")"
         echo -e "PACKAGED_STATUS: success"
         echo -e "PACKAGED_OUTPUTPATH files list:"
-        echo -e "$(ls ${PWD}/out 2>/dev/null) \n"
+        echo -e "$(ls -l . 2>/dev/null) \n"
 
 branding:
   icon: "terminal"
