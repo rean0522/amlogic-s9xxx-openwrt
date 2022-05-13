@@ -58,5 +58,5 @@ svn co https://github.com/hubutui/p7zip-lede/trunk package/p7zip
 # ------------------------------- Other ends -------------------------------
 
 # Add OpenClash
-git clone https://github.com/vernesong/OpenClash.git package/luci-app-amlogic
+git clone https://github.com/vernesong/OpenClash.git package/luci-app-openclash
 
