@@ -57,5 +57,5 @@ svn co https://github.com/hubutui/p7zip-lede/trunk package/p7zip
 #
 # ------------------------------- Other ends -------------------------------
 
-git clone https://github.com/kiddin9/openwrt-packages.git package/kiddin9-packages
+# git clone https://github.com/kiddin9/openwrt-packages.git package/kiddin9-packages
 
